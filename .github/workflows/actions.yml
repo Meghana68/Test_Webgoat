@@ -1,30 +1,50 @@
-name: 'DevSecOps Application Security Actions'
-on: [push, pull_request]
-
+name: Snyk_Code_Scan
+on: [push]
 jobs:
-    code-security:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@master
-        - name: Run Snyk to check for vulnerabilities
-          uses: snyk/actions/maven@master
-          env:
-            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          with:
-            command: code test
-#     name: Snyk code scan
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: snyk/actions/setup@master
-#       - name: Snyk monitor
-#         run: snyk  --all-projects ${{inputs.dependency_scan_arguments}} || echo "snyk scan completed"
-#         shell: bash
-#         env:
-#           SNYK_TOKEN: ${{inputs.dependency_scan_token}}
+      Snyk_Code_Scan:
+        runs-on: ubuntu-latest   
+        steps:
+        - uses: actions/checkout@v1
+        - name: Snyk Code Scanning
+          continue-on-error: true
+          run: |
+            echo "----------Download Latest Snyk CLI-----------"
+            curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.1159.0/snyk-linux"
+            chmod +x snyk
+            ls -lrt
+            echo "----------Authenticating Snyk-----------"
+            ./snyk auth ${{secrets.SNYK_TOKEN}}
+            echo "----------Snyk Scanning-----------"
+            ./snyk code test --all-projects
+            
+=================================================================================
+# name: 'DevSecOps Application Security Actions'
+# on: [push, pull_request]
+
+# jobs:
+#     code-security:
+#       runs-on: ubuntu-latest
+#       steps:
+#         - uses: actions/checkout@master
+#         - name: Run Snyk to check for vulnerabilities
+#           uses: snyk/actions/maven@master
+#           env:
+#             SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+#           with:
+#             command: code test
+# #     name: Snyk code scan
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #       - name: Checkout
+# #         uses: snyk/actions/setup@master
+# #       - name: Snyk monitor
+# #         run: snyk  --all-projects ${{inputs.dependency_scan_arguments}} || echo "snyk scan completed"
+# #         shell: bash
+# #         env:
+# #           SNYK_TOKEN: ${{inputs.dependency_scan_token}}
       
-#       - name: Snyk Continuous Monitor
-#         run: snyk monitor || echo "snyk monitor enabling completed"
-#         shell: bash
-#         env:
-#           SNYK_TOKEN: ${{inputs.dependency_scan_token}}
+# #       - name: Snyk Continuous Monitor
+# #         run: snyk monitor || echo "snyk monitor enabling completed"
+# #         shell: bash
+# #         env:
+# #           SNYK_TOKEN: ${{inputs.dependency_scan_token}}
