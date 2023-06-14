@@ -1,0 +1,30 @@
+name: 'DevSecOps Application Security Actions'
+on: [push, pull_request]
+
+jobs:
+    code-security:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@master
+        - name: Run Snyk to check for vulnerabilities
+          uses: snyk/actions/maven@master
+          env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          with:
+            command: code test
+#     name: Snyk code scan
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: snyk/actions/setup@master
+#       - name: Snyk monitor
+#         run: snyk  --all-projects ${{inputs.dependency_scan_arguments}} || echo "snyk scan completed"
+#         shell: bash
+#         env:
+#           SNYK_TOKEN: ${{inputs.dependency_scan_token}}
+      
+#       - name: Snyk Continuous Monitor
+#         run: snyk monitor || echo "snyk monitor enabling completed"
+#         shell: bash
+#         env:
+#           SNYK_TOKEN: ${{inputs.dependency_scan_token}}
