@@ -17,7 +17,7 @@ jobs:
             echo "----------Snyk Scanning-----------"
             ./snyk code test --all-projects
             
-=================================================================================
+# =================================================================================
 # name: 'DevSecOps Application Security Actions'
 # on: [push, pull_request]
 
